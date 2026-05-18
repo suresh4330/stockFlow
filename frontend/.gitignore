@@ -1,0 +1,4 @@
+# Cache-only ignore rules for the frontend folder.
+.cache/
+.vite/
+node_modules/.cache/

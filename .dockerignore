@@ -1,0 +1,16 @@
+.git
+.github
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.venv
+venv
+node_modules
+dist
+build
+.env
+test_stockflow.db
+stockflow.db
+

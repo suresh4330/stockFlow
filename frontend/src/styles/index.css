@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-zinc-50 text-zinc-900 font-sans text-body;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  html.dark body {
+    @apply bg-zinc-950 text-zinc-100;
+  }
+
+  /* Tabular numerals everywhere a number appears */
+  .num,
+  .font-mono,
+  table,
+  td,
+  th {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Subtle scrollbars */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.12);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  html.dark ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.14);
+  }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid theme("colors.emerald.600");
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* Remove number input spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@layer components {
+  .surface {
+    @apply bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800;
+  }
+
+  .surface-muted {
+    @apply bg-zinc-100/60 dark:bg-zinc-800/40;
+  }
+
+  .label-eyebrow {
+    @apply text-label font-medium text-zinc-500 dark:text-zinc-400 tracking-label;
+  }
+
+  .label-section {
+    @apply text-[10px] font-medium uppercase tracking-[0.08em] text-zinc-500 dark:text-zinc-400;
+  }
+
+  .row-hover {
+    @apply transition-colors duration-100 ease-out-expo hover:bg-zinc-50 dark:hover:bg-zinc-800/40;
+  }
+
+  .skeleton {
+    @apply bg-zinc-200 dark:bg-zinc-800 rounded animate-skeleton-pulse;
+  }
+}
