@@ -106,3 +106,43 @@ export interface DevOpsStatus {
   }>;
   build_info?: Record<string, string>;
 }
+
+export interface SalesOrderItem {
+  id: number;
+  sales_order_id: number;
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+}
+
+export interface SalesOrder {
+  id: number;
+  customer_name: string;
+  status: "pending" | "completed" | "cancelled";
+  total_amount: number;
+  created_by: number;
+  created_at: string;
+  items: SalesOrderItem[];
+}
+
+export interface PurchaseOrderItem {
+  id: number;
+  purchase_order_id: number;
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+}
+
+export interface PurchaseOrder {
+  id: number;
+  supplier_id: number;
+  status: "pending" | "completed" | "cancelled";
+  total_amount: number;
+  created_by: number;
+  created_at: string;
+  items: PurchaseOrderItem[];
+  supplier?: Supplier;
+}
+

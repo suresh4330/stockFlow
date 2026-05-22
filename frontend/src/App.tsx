@@ -5,6 +5,8 @@ import { Login } from "@/pages/Login";
 import { Dashboard } from "@/pages/Dashboard";
 import { Products } from "@/pages/Products";
 import { StockTransactions } from "@/pages/StockTransactions";
+import { SalesOrders } from "@/pages/SalesOrders";
+import { PurchaseOrders } from "@/pages/PurchaseOrders";
 import { Suppliers } from "@/pages/Suppliers";
 import { Reports } from "@/pages/Reports";
 import { DevOpsStatus } from "@/pages/DevOpsStatus";
@@ -31,6 +33,8 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/stock" element={<StockTransactions />} />
+          <Route path="/sales" element={<SalesOrders />} />
+          <Route path="/purchases" element={<PurchaseOrders />} />
           <Route path="/suppliers" element={<Suppliers />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/devops" element={<DevOpsStatus />} />
@@ -40,3 +44,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+

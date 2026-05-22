@@ -36,14 +36,14 @@ make up
 
 Useful URLs:
 
-- App through Nginx: `http://localhost:8080`
+- App through Nginx: `http://localhost:8081`
 - Frontend direct container: served internally by Docker Compose
-- Backend health: `http://localhost:8080/api/health`
-- API docs: `http://localhost:8080/docs`
+- Backend health: `http://localhost:8081/api/health`
+- API docs: `http://localhost:8081/docs`
 - Backend direct: `http://localhost:8000`
 - Prometheus: `http://localhost:9090`
 - Grafana: `http://localhost:3000`
-- Grafana through Nginx: `http://localhost:8080/grafana`
+- Grafana through Nginx: `http://localhost:8081/grafana`
 
 Default demo users seeded into the database:
 

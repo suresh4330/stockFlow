@@ -3,7 +3,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from .models import AlertType, StockTransactionType, UserRole
+from .models import AlertType, OrderStatus, StockTransactionType, UserRole
 
 
 class Token(BaseModel):
@@ -175,4 +175,86 @@ class DevOpsStatusResponse(BaseModel):
     docker_environment: str
     application_version: str
     services: list[dict[str, Any]]
+
+
+# Sales Order Schemas
+class SalesOrderItemCreate(BaseModel):
+    product_id: int
+    quantity: int = Field(gt=0)
+    unit_price: float = Field(ge=0)
+
+
+class SalesOrderItemRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    sales_order_id: int
+    product_id: int
+    quantity: int
+    unit_price: float
+    total_price: float
+
+
+class SalesOrderCreate(BaseModel):
+    customer_name: str = Field(min_length=2, max_length=120)
+    status: OrderStatus = OrderStatus.pending
+    items: list[SalesOrderItemCreate] = Field(min_items=1)
+
+
+class SalesOrderUpdateStatus(BaseModel):
+    status: OrderStatus
+
+
+class SalesOrderRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    customer_name: str
+    status: OrderStatus
+    total_amount: float
+    created_by: int
+    created_at: datetime
+    items: list[SalesOrderItemRead]
+
+
+# Purchase Order Schemas
+class PurchaseOrderItemCreate(BaseModel):
+    product_id: int
+    quantity: int = Field(gt=0)
+    unit_price: float = Field(ge=0)
+
+
+class PurchaseOrderItemRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    purchase_order_id: int
+    product_id: int
+    quantity: int
+    unit_price: float
+    total_price: float
+
+
+class PurchaseOrderCreate(BaseModel):
+    supplier_id: int
+    status: OrderStatus = OrderStatus.pending
+    items: list[PurchaseOrderItemCreate] = Field(min_items=1)
+
+
+class PurchaseOrderUpdateStatus(BaseModel):
+    status: OrderStatus
+
+
+class PurchaseOrderRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    supplier_id: int
+    status: OrderStatus
+    total_amount: float
+    created_by: int
+    created_at: datetime
+    items: list[PurchaseOrderItemRead]
+    supplier: SupplierRead
+
 

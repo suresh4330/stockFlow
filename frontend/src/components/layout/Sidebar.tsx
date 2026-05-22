@@ -6,6 +6,7 @@ import {
   FileText,
   LayoutDashboard,
   PackageSearch,
+  ShoppingBag,
   Truck,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -27,6 +28,8 @@ const sections: Array<{ label: string; items: NavItem[] }> = [
     items: [
       { label: "Products", to: "/products", icon: PackageSearch },
       { label: "Stock transactions", to: "/stock", icon: Boxes },
+      { label: "Sales orders", to: "/sales", icon: ShoppingBag },
+      { label: "Purchase orders", to: "/purchases", icon: FileText },
       { label: "Suppliers", to: "/suppliers", icon: Truck },
       { label: "Reports", to: "/reports", icon: BarChart3 },
     ],
@@ -36,6 +39,7 @@ const sections: Array<{ label: string; items: NavItem[] }> = [
     items: [{ label: "System status", to: "/devops", icon: Activity }],
   },
 ];
+
 
 export function Sidebar() {
   return (

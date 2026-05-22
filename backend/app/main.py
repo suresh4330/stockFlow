@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .database import init_db
-from .routers import alerts, auth, categories, dashboard, devops, products, reports, stock, suppliers
+from .routers import alerts, auth, categories, dashboard, devops, products, reports, stock, suppliers, sales, purchases
 
 try:
     from prometheus_fastapi_instrumentator import Instrumentator
@@ -50,6 +50,9 @@ app.include_router(alerts.router, prefix="/api")
 app.include_router(reports.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
 app.include_router(devops.router, prefix="/api")
+app.include_router(sales.router, prefix="/api")
+app.include_router(purchases.router, prefix="/api")
+
 
 if Instrumentator is not None:
     Instrumentator().instrument(app).expose(app, endpoint="/api/metrics", include_in_schema=False)

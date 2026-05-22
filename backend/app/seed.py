@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from .database import SessionLocal, init_db
-from .models import Category, Product, StockTransaction, StockTransactionType, Supplier, User, UserRole
+from .models import Category, Product, StockTransaction, StockTransactionType, Supplier, User, UserRole, OrderStatus, SalesOrder, SalesOrderItem, PurchaseOrder, PurchaseOrderItem
 from .security import hash_password
 from .services.inventory import sync_alerts_for_product
 
@@ -130,7 +130,72 @@ def seed(db: Session) -> None:
     for product in products:
         sync_alerts_for_product(db, product)
 
+    # Seed Sales Orders
+    sales_order_1 = SalesOrder(
+        customer_name="Innovate LLC",
+        status=OrderStatus.completed,
+        total_amount=49.98,
+        created_by=staff.id,
+    )
+    sales_order_2 = SalesOrder(
+        customer_name="Apex Corp",
+        status=OrderStatus.pending,
+        total_amount=89.00,
+        created_by=staff.id,
+    )
+    db.add_all([sales_order_1, sales_order_2])
+    db.flush()
+
+    so_item_1 = SalesOrderItem(
+        sales_order_id=sales_order_1.id,
+        product_id=products[0].id,
+        quantity=2,
+        unit_price=24.99,
+        total_price=49.98,
+    )
+    so_item_2 = SalesOrderItem(
+        sales_order_id=sales_order_2.id,
+        product_id=products[3].id,
+        quantity=1,
+        unit_price=89.00,
+        total_price=89.00,
+    )
+    db.add_all([so_item_1, so_item_2])
+
+    # Seed Purchase Orders
+    purchase_order_1 = PurchaseOrder(
+        supplier_id=bright_supply.id,
+        status=OrderStatus.completed,
+        total_amount=145.00,
+        created_by=admin.id,
+    )
+    purchase_order_2 = PurchaseOrder(
+        supplier_id=northwind.id,
+        status=OrderStatus.pending,
+        total_amount=162.50,
+        created_by=manager.id,
+    )
+    db.add_all([purchase_order_1, purchase_order_2])
+    db.flush()
+
+    po_item_1 = PurchaseOrderItem(
+        purchase_order_id=purchase_order_1.id,
+        product_id=products[0].id,
+        quantity=10,
+        unit_price=14.50,
+        total_price=145.00,
+    )
+    po_item_2 = PurchaseOrderItem(
+        purchase_order_id=purchase_order_2.id,
+        product_id=products[2].id,
+        quantity=50,
+        unit_price=3.25,
+        total_price=162.50,
+    )
+    db.add_all([po_item_1, po_item_2])
+
     db.commit()
+
 
 
 def main() -> None:

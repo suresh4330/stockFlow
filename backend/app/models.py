@@ -22,6 +22,13 @@ class AlertType(str, Enum):
     out_of_stock = "out_of_stock"
 
 
+class OrderStatus(str, Enum):
+    pending = "pending"
+    completed = "completed"
+    cancelled = "cancelled"
+
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -33,6 +40,9 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     stock_transactions = relationship("StockTransaction", back_populates="created_by_user")
+    sales_orders = relationship("SalesOrder", back_populates="created_by_user")
+    purchase_orders = relationship("PurchaseOrder", back_populates="created_by_user")
+
 
 
 class Category(Base):
@@ -58,6 +68,8 @@ class Supplier(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     products = relationship("Product", back_populates="supplier")
+    purchase_orders = relationship("PurchaseOrder", back_populates="supplier")
+
 
 
 class Product(Base):
@@ -80,6 +92,9 @@ class Product(Base):
     supplier = relationship("Supplier", back_populates="products")
     stock_transactions = relationship("StockTransaction", back_populates="product", cascade="all, delete-orphan")
     alerts = relationship("Alert", back_populates="product", cascade="all, delete-orphan")
+    sales_order_items = relationship("SalesOrderItem", back_populates="product")
+    purchase_order_items = relationship("PurchaseOrderItem", back_populates="product")
+
 
 
 class StockTransaction(Base):
@@ -108,4 +123,62 @@ class Alert(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     product = relationship("Product", back_populates="alerts")
+
+
+class SalesOrder(Base):
+    __tablename__ = "sales_orders"
+
+    id = Column(Integer, primary_key=True, index=True)
+    customer_name = Column(String(120), nullable=False)
+    status = Column(SAEnum(OrderStatus), default=OrderStatus.pending, nullable=False)
+    total_amount = Column(Float, default=0.0, nullable=False)
+    created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    created_by_user = relationship("User", back_populates="sales_orders")
+    items = relationship("SalesOrderItem", back_populates="sales_order", cascade="all, delete-orphan")
+
+
+class SalesOrderItem(Base):
+    __tablename__ = "sales_order_items"
+
+    id = Column(Integer, primary_key=True, index=True)
+    sales_order_id = Column(Integer, ForeignKey("sales_orders.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
+    quantity = Column(Integer, nullable=False)
+    unit_price = Column(Float, nullable=False)
+    total_price = Column(Float, nullable=False)
+
+    sales_order = relationship("SalesOrder", back_populates="items")
+    product = relationship("Product", back_populates="sales_order_items")
+
+
+class PurchaseOrder(Base):
+    __tablename__ = "purchase_orders"
+
+    id = Column(Integer, primary_key=True, index=True)
+    supplier_id = Column(Integer, ForeignKey("suppliers.id"), nullable=False)
+    status = Column(SAEnum(OrderStatus), default=OrderStatus.pending, nullable=False)
+    total_amount = Column(Float, default=0.0, nullable=False)
+    created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    supplier = relationship("Supplier", back_populates="purchase_orders")
+    created_by_user = relationship("User", back_populates="purchase_orders")
+    items = relationship("PurchaseOrderItem", back_populates="purchase_order", cascade="all, delete-orphan")
+
+
+class PurchaseOrderItem(Base):
+    __tablename__ = "purchase_order_items"
+
+    id = Column(Integer, primary_key=True, index=True)
+    purchase_order_id = Column(Integer, ForeignKey("purchase_orders.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
+    quantity = Column(Integer, nullable=False)
+    unit_price = Column(Float, nullable=False)
+    total_price = Column(Float, nullable=False)
+
+    purchase_order = relationship("PurchaseOrder", back_populates="items")
+    product = relationship("Product", back_populates="purchase_order_items")
+
 
